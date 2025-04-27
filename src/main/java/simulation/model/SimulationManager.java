@@ -9,8 +9,8 @@ import java.util.Random;
 
 public class SimulationManager {
 
-    private static final int WORK_START_TIME = 0; // 08:00
-    private static final int WORK_END_TIME = 480; // 16:00 (8 hours)
+    private static final int WORK_START_TIME = 0;
+    private static final int WORK_END_TIME = 480;
 
     private static final int NUM_RECEPTIONISTS = 2;
     private static final int NUM_DOCTORS = 4;
@@ -37,42 +37,35 @@ public class SimulationManager {
 
     public void startSimulation() {
         Random random = new Random();
-        int numberOfCustomers = 90 + random.nextInt(61); // 90 to 150
-
-        int intervalBetweenCustomers = WORK_END_TIME / numberOfCustomers; // spread over the day
-
+        int numberOfCustomers = 90 + random.nextInt(61);
+        int intervalBetweenCustomers = WORK_END_TIME / numberOfCustomers;
         int currentTime = WORK_START_TIME;
 
         for (int i = 1; i <= numberOfCustomers; i++) {
             Customer customer = new Customer(i, currentTime, 0, 0, 0, 0);
             processCustomer(customer, currentTime);
-
             currentTime += intervalBetweenCustomers;
             if (currentTime > WORK_END_TIME) currentTime = WORK_END_TIME;
         }
 
-        // بعد ما تخلص تسجل النتيجة
         SimulationResultsDatabase.saveSimulationResults(customerCount, totalWaitTime, WORK_END_TIME);
     }
 
     private void processCustomer(Customer customer, int arrivalTime) {
         customerCount++;
 
-        int receptionServiceTime = 2 + new Random().nextInt(4); // 2-5 minutes
-        int doctorServiceTime = 5 + new Random().nextInt(6);    // 5-10 minutes
+        int receptionServiceTime = 2 + new Random().nextInt(4);
+        int doctorServiceTime = 5 + new Random().nextInt(6);
 
-        // Reception handling
         int receptionStart = findReceptionAvailableTime(arrivalTime);
         int receptionEnd = receptionStart + receptionServiceTime;
 
         int waitTimeReception = receptionStart - arrivalTime;
         totalWaitTime += waitTimeReception;
 
-        // Doctor handling
         int doctorStart = findDoctorAvailableTime(receptionEnd);
         int doctorEnd = doctorStart + doctorServiceTime;
 
-        // Set details
         customer.setReceptionStart(receptionStart);
         customer.setReceptionEnd(receptionEnd);
         customer.setDoctorStart(doctorStart);
@@ -103,7 +96,6 @@ public class SimulationManager {
     private int findDoctorAvailableTime(int readyTime) {
         int index = doctorAssignCounter % NUM_DOCTORS;
         doctorAssignCounter++;
-
         Doctor doctor = doctors[index];
 
         if (doctor.isAvailableAt(readyTime)) {
