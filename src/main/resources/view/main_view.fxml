@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="simulation.controller.MainController">
+
+    <top>
+        <Label text="Health Center Simulation" style="-fx-font-size: 24px; -fx-padding: 10;" BorderPane.alignment="CENTER"/>
+    </top>
+
+    <center>
+        <VBox spacing="20" alignment="CENTER">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Button fx:id="startButton" text="Start Simulation" />
+            <Label fx:id="clockLabel" text="Time: 08:00" style="-fx-font-size: 18px;" />
+
+            <TableView fx:id="customerTable" prefHeight="300" prefWidth="600">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="arrivalTimeColumn" text="Arrival Time" prefWidth="100"/>
+                    <TableColumn fx:id="receptionStartColumn" text="Reception Start" prefWidth="100"/>
+                    <TableColumn fx:id="receptionEndColumn" text="Reception End" prefWidth="100"/>
+                    <TableColumn fx:id="doctorStartColumn" text="Doctor Start" prefWidth="100"/>
+                    <TableColumn fx:id="doctorEndColumn" text="Doctor End" prefWidth="100"/>
+                </columns>
+            </TableView>
+
+            <VBox spacing="10" alignment="CENTER">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <Label fx:id="totalCustomersLabel" text="Total Customers: " style="-fx-font-size: 16px;" />
+                <Label fx:id="avgReceptionWaitLabel" text="Avg Reception Wait: " style="-fx-font-size: 16px;" />
+                <Label fx:id="avgDoctorWaitLabel" text="Avg Doctor Wait: " style="-fx-font-size: 16px;" />
+                <Label text="Doctors List:" style="-fx-font-size: 18px; -fx-padding: 10 0 5 0;" />
+                <ListView fx:id="doctorsListView" prefHeight="150" prefWidth="300" />
+            </VBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>
