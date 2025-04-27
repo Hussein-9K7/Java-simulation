@@ -1,0 +1,11 @@
+.label {
+    -fx-font-family: "Arial";
+    -fx-text-fill: #333;
+}
+
+.button {
+    -fx-font-size: 14px;
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+}
