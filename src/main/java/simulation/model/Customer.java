@@ -8,7 +8,6 @@ public class Customer {
     private int doctorStart;
     private int doctorEnd;
 
-    // إضافة المعاملات المفقودة في الكونسركتور (التي تحتوي على 6 معاملات)
     public Customer(int id, int arrivalTime, int receptionStart, int receptionEnd, int doctorStart, int doctorEnd) {
         this.id = id;
         this.arrivalTime = arrivalTime;
@@ -18,7 +17,6 @@ public class Customer {
         this.doctorEnd = doctorEnd;
     }
 
-    // Getter and Setter Methods for all fields
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

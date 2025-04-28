@@ -42,7 +42,11 @@ public class MainController {
     @FXML
     private Label avgReceptionWaitLabel;
     @FXML
+    private Label avgReceptionServiceLabel;
+    @FXML
     private Label avgDoctorWaitLabel;
+    @FXML
+    private Label avgDoctorServiceLabel;
     @FXML
     private ListView<String> doctorsListView;
 
@@ -154,7 +158,9 @@ public class MainController {
     private void showSimulationResults() {
         int totalCustomers = 0;
         int totalReceptionWait = 0;
+        int totalReceptionService = 0;
         int totalDoctorWait = 0;
+        int totalDoctorService = 0;
 
         try (Connection connection = DatabaseManager.connect();
              Statement statement = connection.createStatement();
@@ -163,21 +169,29 @@ public class MainController {
                 totalCustomers++;
                 int arrival = resultSet.getInt("arrival_time");
                 int receptionStart = resultSet.getInt("reception_start");
+                int receptionEnd = resultSet.getInt("reception_end");
                 int doctorStart = resultSet.getInt("doctor_start");
+                int doctorEnd = resultSet.getInt("doctor_end");
 
                 totalReceptionWait += (receptionStart - arrival);
-                totalDoctorWait += (doctorStart - receptionStart);
+                totalReceptionService += (receptionEnd - receptionStart);
+                totalDoctorWait += (doctorStart - receptionEnd);
+                totalDoctorService += (doctorEnd - doctorStart);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         int avgReceptionWait = totalCustomers > 0 ? totalReceptionWait / totalCustomers : 0;
+        int avgReceptionService = totalCustomers > 0 ? totalReceptionService / totalCustomers : 0;
         int avgDoctorWait = totalCustomers > 0 ? totalDoctorWait / totalCustomers : 0;
+        int avgDoctorService = totalCustomers > 0 ? totalDoctorService / totalCustomers : 0;
 
         totalCustomersLabel.setText("Total Customers: " + totalCustomers);
         avgReceptionWaitLabel.setText("Avg Reception Wait: " + avgReceptionWait + " min");
+        avgReceptionServiceLabel.setText("Avg Reception Service: " + avgReceptionService + " min");
         avgDoctorWaitLabel.setText("Avg Doctor Wait: " + avgDoctorWait + " min");
+        avgDoctorServiceLabel.setText("Avg Doctor Service: " + avgDoctorService + " min");
 
         ObservableList<String> doctorList = FXCollections.observableArrayList();
         try (Connection connection = DatabaseManager.connect();
