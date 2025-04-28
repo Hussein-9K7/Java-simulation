@@ -75,19 +75,19 @@ public class MainController {
 
     private void startSimulation() {
         Thread thread = new Thread(() -> {
-            while (currentTime <= 480) { // ما يصل إلى نهاية اليوم
+            while (currentTime <= 480) {
                 try {
-                    int hours = 8 + (currentTime / 60); // حساب الساعات
-                    int minutes = currentTime % 60; // حساب الدقائق
+                    int hours = 8 + (currentTime / 60);
+                    int minutes = currentTime % 60;
                     String formattedTime = String.format("%02d:%02d", hours, minutes);
 
-                    // عرض الوقت على الشاشة
+
                     javafx.application.Platform.runLater(() -> clockLabel.setText("Time: " + formattedTime));
 
-                    // التحديث كل دقيقة
+
                     Thread.sleep(100);
 
-                    // كل 60 دقيقة (كل ساعة) سنعرض نتائج المحاكاة
+
                     if (currentTime % 60 == 0) {
                         javafx.application.Platform.runLater(this::showHourlySimulationResults);
                     }
@@ -98,7 +98,7 @@ public class MainController {
                     e.printStackTrace();
                 }
             }
-            // بعد الانتهاء من المحاكاة يعرض النتائج النهائية
+
             javafx.application.Platform.runLater(this::showSimulationResults);
         });
         thread.setDaemon(true);
@@ -252,7 +252,7 @@ public class MainController {
         int avgDoctorWait = totalCustomers > 0 ? totalDoctorWait / totalCustomers : 0;
         int avgDoctorService = totalCustomers > 0 ? totalDoctorService / totalCustomers : 0;
 
-        // عرض النتائج لكل ساعة
+
         System.out.println("=== Hourly Simulation Results at " + (currentTime / 60) + " hour(s) ===");
         System.out.println("Total Customers: " + totalCustomers);
         System.out.println("Avg Reception Wait: " + avgReceptionWait + " min");
@@ -260,7 +260,7 @@ public class MainController {
         System.out.println("Avg Doctor Wait: " + avgDoctorWait + " min");
         System.out.println("Avg Doctor Service: " + avgDoctorService + " min");
 
-        // عرض البيانات في الواجهة
+
         totalCustomersLabel.setText("Total Customers: " + totalCustomers);
         avgReceptionWaitLabel.setText("Avg Reception Wait: " + avgReceptionWait + " min");
         avgReceptionServiceLabel.setText("Avg Reception Service: " + avgReceptionService + " min");
