@@ -3,23 +3,47 @@ package simulation.model;
 public class SimulationResult {
     private int id;
     private int totalPatients;
-    private int totalWaitTime;
+    private int avgReceptionWaitTime;
+    private int avgReceptionServiceTime;
+    private int avgDoctorWaitTime;
+    private int avgDoctorServiceTime;
     private int simulationTime;
 
-    public SimulationResult(int id, int totalPatients, int totalWaitTime, int simulationTime) {
+    public SimulationResult(int id, int totalPatients, int avgReceptionWaitTime, int avgReceptionServiceTime, int avgDoctorWaitTime, int avgDoctorServiceTime, int simulationTime) {
         this.id = id;
         this.totalPatients = totalPatients;
-        this.totalWaitTime = totalWaitTime;
+        this.avgReceptionWaitTime = avgReceptionWaitTime;
+        this.avgReceptionServiceTime = avgReceptionServiceTime;
+        this.avgDoctorWaitTime = avgDoctorWaitTime;
+        this.avgDoctorServiceTime = avgDoctorServiceTime;
         this.simulationTime = simulationTime;
     }
 
-    // Getters and Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-    public int getTotalPatients() { return totalPatients; }
-    public void setTotalPatients(int totalPatients) { this.totalPatients = totalPatients; }
-    public int getTotalWaitTime() { return totalWaitTime; }
-    public void setTotalWaitTime(int totalWaitTime) { this.totalWaitTime = totalWaitTime; }
-    public int getSimulationTime() { return simulationTime; }
-    public void setSimulationTime(int simulationTime) { this.simulationTime = simulationTime; }
+    public int getId() {
+        return id;
+    }
+
+    public int getTotalPatients() {
+        return totalPatients;
+    }
+
+    public int getAvgReceptionWaitTime() {
+        return avgReceptionWaitTime;
+    }
+
+    public int getAvgReceptionServiceTime() {
+        return avgReceptionServiceTime;
+    }
+
+    public int getAvgDoctorWaitTime() {
+        return avgDoctorWaitTime;
+    }
+
+    public int getAvgDoctorServiceTime() {
+        return avgDoctorServiceTime;
+    }
+
+    public int getSimulationTime() {
+        return simulationTime;
+    }
 }
