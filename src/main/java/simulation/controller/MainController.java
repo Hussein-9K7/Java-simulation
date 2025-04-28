@@ -75,18 +75,30 @@ public class MainController {
 
     private void startSimulation() {
         Thread thread = new Thread(() -> {
-            while (currentTime <= 480) {
+            while (currentTime <= 480) { // ما يصل إلى نهاية اليوم
                 try {
-                    int hours = 8 + (currentTime / 60);
-                    int minutes = currentTime % 60;
+                    int hours = 8 + (currentTime / 60); // حساب الساعات
+                    int minutes = currentTime % 60; // حساب الدقائق
                     String formattedTime = String.format("%02d:%02d", hours, minutes);
+
+                    // عرض الوقت على الشاشة
                     javafx.application.Platform.runLater(() -> clockLabel.setText("Time: " + formattedTime));
+
+                    // التحديث كل دقيقة
                     Thread.sleep(100);
+
+                    // كل 60 دقيقة (كل ساعة) سنعرض نتائج المحاكاة
+                    if (currentTime % 60 == 0) {
+                        javafx.application.Platform.runLater(this::showHourlySimulationResults);
+                    }
+
+                    // زيادة الوقت
                     currentTime++;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            // بعد الانتهاء من المحاكاة يعرض النتائج النهائية
             javafx.application.Platform.runLater(this::showSimulationResults);
         });
         thread.setDaemon(true);
@@ -206,5 +218,53 @@ public class MainController {
             e.printStackTrace();
         }
         doctorsListView.setItems(doctorList);
+    }
+
+    private void showHourlySimulationResults() {
+        int totalCustomers = 0;
+        int totalReceptionWait = 0;
+        int totalReceptionService = 0;
+        int totalDoctorWait = 0;
+        int totalDoctorService = 0;
+
+        try (Connection connection = DatabaseManager.connect();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("SELECT * FROM customers WHERE arrival_time <= " + currentTime)) {
+            while (resultSet.next()) {
+                totalCustomers++;
+                int arrival = resultSet.getInt("arrival_time");
+                int receptionStart = resultSet.getInt("reception_start");
+                int receptionEnd = resultSet.getInt("reception_end");
+                int doctorStart = resultSet.getInt("doctor_start");
+                int doctorEnd = resultSet.getInt("doctor_end");
+
+                totalReceptionWait += (receptionStart - arrival);
+                totalReceptionService += (receptionEnd - receptionStart);
+                totalDoctorWait += (doctorStart - receptionEnd);
+                totalDoctorService += (doctorEnd - doctorStart);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        int avgReceptionWait = totalCustomers > 0 ? totalReceptionWait / totalCustomers : 0;
+        int avgReceptionService = totalCustomers > 0 ? totalReceptionService / totalCustomers : 0;
+        int avgDoctorWait = totalCustomers > 0 ? totalDoctorWait / totalCustomers : 0;
+        int avgDoctorService = totalCustomers > 0 ? totalDoctorService / totalCustomers : 0;
+
+        // عرض النتائج لكل ساعة
+        System.out.println("=== Hourly Simulation Results at " + (currentTime / 60) + " hour(s) ===");
+        System.out.println("Total Customers: " + totalCustomers);
+        System.out.println("Avg Reception Wait: " + avgReceptionWait + " min");
+        System.out.println("Avg Reception Service: " + avgReceptionService + " min");
+        System.out.println("Avg Doctor Wait: " + avgDoctorWait + " min");
+        System.out.println("Avg Doctor Service: " + avgDoctorService + " min");
+
+        // عرض البيانات في الواجهة
+        totalCustomersLabel.setText("Total Customers: " + totalCustomers);
+        avgReceptionWaitLabel.setText("Avg Reception Wait: " + avgReceptionWait + " min");
+        avgReceptionServiceLabel.setText("Avg Reception Service: " + avgReceptionService + " min");
+        avgDoctorWaitLabel.setText("Avg Doctor Wait: " + avgDoctorWait + " min");
+        avgDoctorServiceLabel.setText("Avg Doctor Service: " + avgDoctorService + " min");
     }
 }
