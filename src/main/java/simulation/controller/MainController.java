@@ -260,7 +260,6 @@ public class MainController {
         System.out.println("Avg Doctor Wait: " + avgDoctorWait + " min");
         System.out.println("Avg Doctor Service: " + avgDoctorService + " min");
 
-
         totalCustomersLabel.setText("Total Customers: " + totalCustomers);
         avgReceptionWaitLabel.setText("Avg Reception Wait: " + avgReceptionWait + " min");
         avgReceptionServiceLabel.setText("Avg Reception Service: " + avgReceptionService + " min");
