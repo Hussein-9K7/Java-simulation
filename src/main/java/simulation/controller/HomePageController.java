@@ -50,7 +50,6 @@ public class HomePageController {
 
     private int currentTime = 0;
     private SimulationManager simulationManager;
-
     private MainLayoutController mainLayoutController;
 
     public void setMainLayoutController(MainLayoutController controller) {
@@ -69,6 +68,9 @@ public class HomePageController {
         startButton.setOnAction(e -> {
             currentTime = 0;
             clearCustomerAndDoctorTables();
+            if (mainLayoutController != null) {
+                mainLayoutController.resetTabs();
+            }
             startSimulation();
             simulationManager = new SimulationManager();
             simulationManager.startSimulation();
@@ -85,6 +87,9 @@ public class HomePageController {
                     int minutes = currentTime % 60;
                     String formattedTime = String.format("%02d:%02d", hours, minutes);
                     javafx.application.Platform.runLater(() -> clockLabel.setText("Time: " + formattedTime));
+                    if (currentTime == 480 && mainLayoutController != null) {
+                        javafx.application.Platform.runLater(() -> mainLayoutController.notifySimulationCompleted());
+                    }
                     Thread.sleep(100);
                     currentTime++;
                 } catch (InterruptedException e) {
@@ -166,9 +171,5 @@ public class HomePageController {
         avgReceptionServiceLabel.setText("Avg Reception Service: " + avgReceptionService + " min");
         avgDoctorWaitLabel.setText("Avg Doctor Wait: " + avgDoctorWait + " min");
         avgDoctorServiceLabel.setText("Avg Doctor Service: " + avgDoctorService + " min");
-
-        if (mainLayoutController != null) {
-            mainLayoutController.notifySimulationCompleted();
-        }
     }
 }

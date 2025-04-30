@@ -15,10 +15,8 @@ public class DoctorsPageController {
     @FXML
     private ListView<String> doctorsListView;
 
-    @FXML
-    public void initialize() {
+    public void updateDoctors() {
         ObservableList<String> doctorList = FXCollections.observableArrayList();
-
         try (Connection connection = DatabaseManager.connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT name, specialization FROM doctors")) {

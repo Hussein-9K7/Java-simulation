@@ -12,8 +12,11 @@
             <tabs>
                 <Tab fx:id="homeTab" text="Home" />
                 <Tab fx:id="chartsTab" text="Charts" />
-                <Tab text="Doctors">
+                <Tab fx:id="doctorsTab" text="Doctors">
                     <fx:include source="DoctorsPage.fxml"/>
+                </Tab>
+                <Tab fx:id="statisticsTab" text="Statistics">
+                    <fx:include source="StatisticsPage.fxml"/>
                 </Tab>
             </tabs>
         </TabPane>
