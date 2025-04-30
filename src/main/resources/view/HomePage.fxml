@@ -31,18 +31,6 @@
                     <TableColumn fx:id="doctorEndColumn" text="Doctor End" prefWidth="100"/>
                 </columns>
             </TableView>
-
-            <VBox spacing="10" alignment="CENTER">
-                <padding>
-                    <Insets top="20" right="20" bottom="20" left="20"/>
-                </padding>
-
-                <Label fx:id="totalCustomersLabel" text="Total Customers: " style="-fx-font-size: 16px;" />
-                <Label fx:id="avgReceptionWaitLabel" text="Avg Reception Wait: " style="-fx-font-size: 16px;" />
-                <Label fx:id="avgReceptionServiceLabel" text="Avg Reception Service: " style="-fx-font-size: 16px;" />
-                <Label fx:id="avgDoctorWaitLabel" text="Avg Doctor Wait: " style="-fx-font-size: 16px;" />
-                <Label fx:id="avgDoctorServiceLabel" text="Avg Doctor Service: " style="-fx-font-size: 16px;" />
-            </VBox>
         </VBox>
     </center>
 </BorderPane>

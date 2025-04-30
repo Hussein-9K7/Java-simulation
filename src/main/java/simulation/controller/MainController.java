@@ -197,12 +197,13 @@ public class MainController {
                 String specialization = resultSet.getString("specialization");
                 doctorList.add(name + " - " + specialization);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
         doctorsListView.setItems(doctorList);
 
-        // 🔴 الجديد: تحديث صفحة الرسم البياني
+        // Notify the main layout controller that the simulation has completed
         if (mainLayoutController != null) {
             mainLayoutController.notifySimulationCompleted();
         }

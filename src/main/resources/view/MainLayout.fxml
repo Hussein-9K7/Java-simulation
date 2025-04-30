@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="simulation.controller.MainLayoutController">
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="simulation.controller.MainLayoutController">
 
     <top>
         <TabPane fx:id="tabPane">
             <tabs>
                 <Tab fx:id="homeTab" text="Home" />
                 <Tab fx:id="chartsTab" text="Charts" />
-                <Tab text="Doctors">
-                    <fx:include source="DoctorsPage.fxml"/>
+                <Tab fx:id="doctorsTab" text="Doctors">
+                    <fx:include source="DoctorsPage.fxml" />
                 </Tab>
+                <Tab fx:id="statisticsTab" text="Statistics">
+                    <fx:include source="StatisticsPage.fxml" />
+                </Tab>
+            <Tab fx:id="SimulationView" text="SimulationView">
+                <fx:include source="SimulationView.fxml"/>
+
+
+
+            </Tab>
             </tabs>
         </TabPane>
     </top>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="simulation.controller.StatisticsPageController"
+      spacing="15" alignment="CENTER"
+      style="-fx-padding: 30; -fx-background-color: linear-gradient(to bottom, #ffffff, #e0f7fa);">
+
+    <Label text="📊 Simulation Summary"
+           style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #00796b;" />
+
+    <Label fx:id="totalPatientsLabel"
+           text="Total Patients: "
+           style="-fx-font-size: 16px; -fx-text-fill: #37474f;" />
+
+    <Label fx:id="receptionWaitLabel"
+           text="Reception Wait Avg: "
+           style="-fx-font-size: 16px; -fx-text-fill: #37474f;" />
+
+    <Label fx:id="receptionServiceLabel"
+           text="Reception Service Avg: "
+           style="-fx-font-size: 16px; -fx-text-fill: #37474f;" />
+
+    <Label fx:id="doctorWaitLabel"
+           text="Doctor Wait Avg: "
+           style="-fx-font-size: 16px; -fx-text-fill: #37474f;" />
+
+    <Label fx:id="doctorServiceLabel"
+           text="Doctor Service Avg: "
+           style="-fx-font-size: 16px; -fx-text-fill: #37474f;" />
+
+</VBox>
