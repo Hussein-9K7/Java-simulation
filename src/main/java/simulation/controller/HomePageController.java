@@ -13,7 +13,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class MainController {
+public class HomePageController {
 
     @FXML
     private Label clockLabel;
@@ -47,14 +47,11 @@ public class MainController {
     private Label avgDoctorWaitLabel;
     @FXML
     private Label avgDoctorServiceLabel;
-    @FXML
-    private ListView<String> doctorsListView;
 
     private int currentTime = 0;
     private SimulationManager simulationManager;
 
     private MainLayoutController mainLayoutController;
-
 
     public void setMainLayoutController(MainLayoutController controller) {
         this.mainLayoutController = controller;
@@ -71,12 +68,12 @@ public class MainController {
 
         startButton.setOnAction(e -> {
             currentTime = 0;
-            clearAllTables();
-            showSuccessAlert();
+            clearCustomerAndDoctorTables();
             startSimulation();
             simulationManager = new SimulationManager();
             simulationManager.startSimulation();
             loadCustomerData();
+            showSimulationResults();
         });
     }
 
@@ -87,22 +84,13 @@ public class MainController {
                     int hours = 8 + (currentTime / 60);
                     int minutes = currentTime % 60;
                     String formattedTime = String.format("%02d:%02d", hours, minutes);
-
                     javafx.application.Platform.runLater(() -> clockLabel.setText("Time: " + formattedTime));
-
                     Thread.sleep(100);
-
-                    if (currentTime % 60 == 0) {
-                        javafx.application.Platform.runLater(this::showHourlySimulationResults);
-                    }
-
                     currentTime++;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-
-            javafx.application.Platform.runLater(this::showSimulationResults);
         });
         thread.setDaemon(true);
         thread.start();
@@ -120,7 +108,6 @@ public class MainController {
                 int receptionEnd = resultSet.getInt("reception_end");
                 int doctorStart = resultSet.getInt("doctor_start");
                 int doctorEnd = resultSet.getInt("doctor_end");
-
                 customers.add(new CustomerView(id, arrivalTime, receptionStart, receptionEnd, doctorStart, doctorEnd));
             }
         } catch (Exception e) {
@@ -129,7 +116,7 @@ public class MainController {
         customerTable.setItems(customers);
     }
 
-    private void clearAllTables() {
+    private void clearCustomerAndDoctorTables() {
         try (Connection connection = DatabaseManager.connect();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("DELETE FROM customers");
@@ -140,14 +127,6 @@ public class MainController {
             e.printStackTrace();
         }
         customerTable.getItems().clear();
-    }
-
-    private void showSuccessAlert() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Tables Reset");
-        alert.setHeaderText(null);
-        alert.setContentText("All tables have been successfully cleared! The simulation will now start ✅");
-        alert.showAndWait();
     }
 
     private void showSimulationResults() {
@@ -188,62 +167,8 @@ public class MainController {
         avgDoctorWaitLabel.setText("Avg Doctor Wait: " + avgDoctorWait + " min");
         avgDoctorServiceLabel.setText("Avg Doctor Service: " + avgDoctorService + " min");
 
-        ObservableList<String> doctorList = FXCollections.observableArrayList();
-        try (Connection connection = DatabaseManager.connect();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT * FROM doctors")) {
-            while (resultSet.next()) {
-                String name = resultSet.getString("name");
-                String specialization = resultSet.getString("specialization");
-                doctorList.add(name + " - " + specialization);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        doctorsListView.setItems(doctorList);
-
-        // 🔴 الجديد: تحديث صفحة الرسم البياني
         if (mainLayoutController != null) {
             mainLayoutController.notifySimulationCompleted();
         }
-    }
-
-    private void showHourlySimulationResults() {
-        int totalCustomers = 0;
-        int totalReceptionWait = 0;
-        int totalReceptionService = 0;
-        int totalDoctorWait = 0;
-        int totalDoctorService = 0;
-
-        try (Connection connection = DatabaseManager.connect();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT * FROM customers WHERE arrival_time <= " + currentTime)) {
-            while (resultSet.next()) {
-                totalCustomers++;
-                int arrival = resultSet.getInt("arrival_time");
-                int receptionStart = resultSet.getInt("reception_start");
-                int receptionEnd = resultSet.getInt("reception_end");
-                int doctorStart = resultSet.getInt("doctor_start");
-                int doctorEnd = resultSet.getInt("doctor_end");
-
-                totalReceptionWait += (receptionStart - arrival);
-                totalReceptionService += (receptionEnd - receptionStart);
-                totalDoctorWait += (doctorStart - receptionEnd);
-                totalDoctorService += (doctorEnd - doctorStart);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        int avgReceptionWait = totalCustomers > 0 ? totalReceptionWait / totalCustomers : 0;
-        int avgReceptionService = totalCustomers > 0 ? totalReceptionService / totalCustomers : 0;
-        int avgDoctorWait = totalCustomers > 0 ? totalDoctorWait / totalCustomers : 0;
-        int avgDoctorService = totalCustomers > 0 ? totalDoctorService / totalCustomers : 0;
-
-        totalCustomersLabel.setText("Total Customers: " + totalCustomers);
-        avgReceptionWaitLabel.setText("Avg Reception Wait: " + avgReceptionWait + " min");
-        avgReceptionServiceLabel.setText("Avg Reception Service: " + avgReceptionService + " min");
-        avgDoctorWaitLabel.setText("Avg Doctor Wait: " + avgDoctorWait + " min");
-        avgDoctorServiceLabel.setText("Avg Doctor Service: " + avgDoctorService + " min");
     }
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="simulation.controller.MainLayoutController">
+
+    <top>
+        <TabPane fx:id="tabPane">
+            <tabs>
+                <Tab fx:id="homeTab" text="Home" />
+                <Tab fx:id="chartsTab" text="Charts" />
+                <Tab text="Doctors">
+                    <fx:include source="DoctorsPage.fxml"/>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </top>
+
+</BorderPane>
