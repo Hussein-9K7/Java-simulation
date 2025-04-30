@@ -23,6 +23,7 @@ public class SimulationManager {
     private List<Integer> doctorIds = new ArrayList<>();
 
     public SimulationManager() {
+        clearPreviousData();
         for (int i = 0; i < NUM_RECEPTIONISTS; i++) {
             receptionists[i] = new Receptionist();
         }
@@ -54,19 +55,27 @@ public class SimulationManager {
             if (currentTime > WORK_END_TIME) currentTime = WORK_END_TIME;
         }
 
-        int avgReceptionWaitTime = (customerCount == 0) ? 0 : totalReceptionWaitTime / customerCount;
-        int avgReceptionServiceTime = (customerCount == 0) ? 0 : totalReceptionServiceTime / customerCount;
-        int avgDoctorWaitTime = (customerCount == 0) ? 0 : totalDoctorWaitTime / customerCount;
-        int avgDoctorServiceTime = (customerCount == 0) ? 0 : totalDoctorServiceTime / customerCount;
+        int avgReceptionWaitTime = customerCount == 0 ? 0 : totalReceptionWaitTime / customerCount;
+        int avgReceptionServiceTime = customerCount == 0 ? 0 : totalReceptionServiceTime / customerCount;
+        int avgDoctorWaitTime = customerCount == 0 ? 0 : totalDoctorWaitTime / customerCount;
+        int avgDoctorServiceTime = customerCount == 0 ? 0 : totalDoctorServiceTime / customerCount;
 
-        System.out.println("=== Simulation Summary ===");
-        System.out.println("Total Customers: " + customerCount);
-        System.out.println("Avg Reception Wait Time: " + avgReceptionWaitTime + " minutes");
-        System.out.println("Avg Reception Service Time: " + avgReceptionServiceTime + " minutes");
-        System.out.println("Avg Doctor Wait Time: " + avgDoctorWaitTime + " minutes");
-        System.out.println("Avg Doctor Service Time: " + avgDoctorServiceTime + " minutes");
+        saveSimulationResults(customerCount, avgReceptionWaitTime, avgReceptionServiceTime, avgDoctorWaitTime, avgDoctorServiceTime);
+    }
 
-        SimulationResultsDatabase.saveSimulationResults(customerCount, avgReceptionWaitTime, avgReceptionServiceTime, avgDoctorWaitTime, avgDoctorServiceTime, WORK_END_TIME);
+    private void clearPreviousData() {
+        try (Connection connection = DatabaseManager.connect();
+             Statement statement = connection.createStatement()) {
+
+            statement.executeUpdate("DELETE FROM customers");
+            statement.executeUpdate("ALTER TABLE customers AUTO_INCREMENT = 1");
+
+            statement.executeUpdate("DELETE FROM doctors");
+            statement.executeUpdate("ALTER TABLE doctors AUTO_INCREMENT = 1");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void createDoctors() {
@@ -85,9 +94,6 @@ public class SimulationManager {
 
         try (Connection connection = DatabaseManager.connect();
              Statement statement = connection.createStatement()) {
-
-            statement.executeUpdate("DELETE FROM doctors");
-            statement.executeUpdate("ALTER TABLE doctors AUTO_INCREMENT = 1");
 
             doctorIds.clear();
 
@@ -192,6 +198,25 @@ public class SimulationManager {
 
             statement.executeUpdate();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveSimulationResults(int total, int recWait, int recService, int docWait, int docService) {
+        String query = "INSERT INTO simulation_results (total_patients, avg_reception_wait_time, avg_reception_service_time, avg_doctor_wait_time, avg_doctor_service_time, simulation_time) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, total);
+            statement.setInt(2, recWait);
+            statement.setInt(3, recService);
+            statement.setInt(4, docWait);
+            statement.setInt(5, docService);
+            statement.setInt(6, WORK_END_TIME);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

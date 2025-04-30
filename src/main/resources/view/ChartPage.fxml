@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="simulation.controller.ChartPageController">
+    <children>
+        <Label layoutX="20" layoutY="20" text="Simulation Time Breakdown">
+            <font>
+                <Font name="System Bold" size="18"/>
+            </font>
+        </Label>
+        <PieChart fx:id="pieChart" layoutX="50" layoutY="60" prefHeight="400" prefWidth="500"/>
+    </children>
+</AnchorPane>
