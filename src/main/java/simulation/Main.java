@@ -52,6 +52,7 @@ public class Main extends Application {
                     FXMLLoader simulationLoader = new FXMLLoader(getClass().getResource("/view/SimulationView.fxml"));
                     tab.setContent(simulationLoader.load());
                     SimulationController simulationController = simulationLoader.getController();
+                    mainLayoutController.setSimulationController(simulationController); // CORRECTO
                     break;
             }
         }

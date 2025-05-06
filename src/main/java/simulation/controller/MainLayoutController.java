@@ -8,6 +8,7 @@ public class MainLayoutController {
     private ChartPageController chartPageController;
     private StatisticsPageController statisticsPageController;
     private DoctorsPageController doctorsPageController;
+    private SimulationController simulationController;
 
     @FXML
     private Tab doctorsTab;
@@ -17,6 +18,10 @@ public class MainLayoutController {
 
     @FXML
     private Tab statisticsTab;
+
+    @FXML
+    private Tab simulationTab;
+
 
     public void setChartPageController(ChartPageController controller) {
         this.chartPageController = controller;
@@ -29,7 +34,9 @@ public class MainLayoutController {
     public void setDoctorsPageController(DoctorsPageController controller) {
         this.doctorsPageController = controller;
     }
-
+    public void setSimulationController(SimulationController controller) {
+        this.simulationController = controller;
+    }
     public void notifySimulationCompleted() {
         if (chartPageController != null) {
             chartPageController.updateChart();
@@ -49,6 +56,10 @@ public class MainLayoutController {
         if (statisticsTab != null) {
             statisticsTab.setDisable(false);
         }
+        if (simulationTab != null) {
+            simulationTab.setDisable(false);
+        }
+
     }
 
     public void resetTabs() {
@@ -60,6 +71,9 @@ public class MainLayoutController {
         }
         if (statisticsTab != null) {
             statisticsTab.setDisable(true);
+        }
+        if (simulationTab != null) {
+            simulationTab.setDisable(true);
         }
     }
 

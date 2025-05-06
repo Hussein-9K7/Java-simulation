@@ -5,10 +5,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="simulationPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="simulation.controller.SimulationController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="simulation.controller.SimulationController">
    <children>
-      <Label fx:id="waitLabel" layoutX="108.0" layoutY="87.0" text="Label" />
-      <Button fx:id="startButton" layoutX="96.0" layoutY="141.0" mnemonicParsing="false" text="Button" />
-      <Pane fx:id="SimulationPane" layoutX="287.0" layoutY="76.0" prefHeight="200.0" prefWidth="200.0" />
+      <Label fx:id="waitLabel" layoutX="80.0" layoutY="87.0" prefHeight="17.0" prefWidth="140.0" text="Label" />
+      <Button fx:id="startButton" layoutX="80.0" layoutY="143.0" mnemonicParsing="false" text="Button" />
+      <Pane fx:id="simulationPane" layoutX="287.0" layoutY="76.0" prefHeight="600.0" prefWidth="800.0" />
    </children>
 </AnchorPane>
